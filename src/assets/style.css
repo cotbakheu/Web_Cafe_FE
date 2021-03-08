@@ -1,0 +1,19 @@
+.cancelBtn {
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px 20px;
+    background-color: #f24f8a;
+    border-radius: 5px;
+    min-width: 70px;
+    color: white;
+}
+
+.confirmBtn {
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px 20px;
+    background-color: #57cad5;
+    border-radius: 5px;
+    min-width: 70px;
+    color: white;
+}
