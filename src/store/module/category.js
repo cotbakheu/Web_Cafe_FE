@@ -15,9 +15,9 @@ const category = {
   actions: {
     actionGetCategory(context) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:3000/category').then((response) => {
+        axios.get(`${process.env.VUE_APP_SERVER}/category`).then((response) => {
           context.commit('mutationGetCategory', response.data.data);
-          resolve(response.data.message);
+          resolve(true);
         }).catch((err) => {
           reject(err);
         });

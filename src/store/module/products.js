@@ -1,11 +1,11 @@
 import axios from 'axios';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 const product = {
   namespaced: true,
   state() {
     return {
-      dataProduct: [],
+      dataProduct: {},
       detailProduct: [],
     };
   },
@@ -20,28 +20,18 @@ const product = {
   actions: {
     insertProduct(context, data) {
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:3000/items', data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          console.log(response.data);
-          if (response.data.code === 500) {
-            Swal.fire({
-              text: `${response.data.message}`,
-              icon: 'error',
-            });
-          } else {
-            Swal.fire({
-              text: `${response.data.message}`,
-              icon: 'success',
-            });
-            resolve(response.data.message);
-          }
+        axios.post(`${process.env.VUE_APP_SERVER}/items`, data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+          // console.log(response.data)  
+          resolve(response.data);
         }).catch((err) => {
           reject(err);
         });
       });
     },
-    actionsGetProduct(context) {
+    actionsGetProduct(context, search='a', sort='asc', params='name') {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:3000/items', { headers: { token: localStorage.getItem('token') } }).then((response) => {
+        axios.get(`${process.env.VUE_APP_SERVER}/items?search=${search}&sort=${sort}&params=${params}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+          // console.log(response)
           context.commit('mutationGetProduct', response.data.data);
           resolve(response.data.message);
         }).catch((err) => {

@@ -8,7 +8,10 @@ import moduleCategory from './module/category';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
+  state() {
+    return {
+      Web_URL : `http://${process.env.VUE_APP_SERVER}`
+    }
   },
   mutations: {
   },
