@@ -16,24 +16,28 @@ const product = {
     mutationDetailProduct(state, payload) {
       state.detailProduct = payload;
     },
+    mutationPagination(state, payload) {
+      state.pagination = payload;
+    },
   },
   actions: {
     insertProduct(context, data) {
       return new Promise((resolve, reject) => {
         axios.post(`${process.env.VUE_APP_SERVER}/items`, data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          // console.log(response.data)  
+          console.log(response.data)  
           resolve(response.data);
         }).catch((err) => {
           reject(err);
         });
       });
     },
-    actionsGetProduct(context, search='a', sort='asc', params='name') {
+    actionsGetProduct(context, data) {
       return new Promise((resolve, reject) => {
-        axios.get(`${process.env.VUE_APP_SERVER}/items?search=${search}&sort=${sort}&params=${params}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+        axios.get(`${process.env.VUE_APP_SERVER}/items?search=${data.search}&sort=${data.sort}&params=${data.params}&page=${data.page}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
           // console.log(response)
           context.commit('mutationGetProduct', response.data.data);
-          resolve(response.data.message);
+          context.commit('mutationPagination', response.data.pagination)
+          resolve(response.data);
         }).catch((err) => {
           reject(err);
         });
@@ -78,6 +82,9 @@ const product = {
     },
     detailProduct(state) {
       return state.detailProduct;
+    },
+    getPagination(state) {
+      return state.pagination;
     },
   },
 };

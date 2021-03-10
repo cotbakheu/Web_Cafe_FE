@@ -4,6 +4,7 @@ import moduleUsers from './module/users';
 import moduleAuth from './module/auth';
 import moduleProduct from './module/products';
 import moduleCategory from './module/category';
+import moduleHistory from './module/history'
 
 Vue.use(Vuex);
 
@@ -22,5 +23,6 @@ export default new Vuex.Store({
     auth: moduleAuth,
     product: moduleProduct,
     category: moduleCategory,
+    history: moduleHistory,
   },
 });

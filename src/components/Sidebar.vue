@@ -1,32 +1,46 @@
 <template>
   <div>
-    <div class="w-auto shadow-lg" style="height: 100vh">
+    <div>
       <div>
-        <router-link to="/" class="pt-5 d-block ml-auto"
-          ><img src="../assets/images/fork.png" alt="items"
-        /></router-link>
+        <router-link to="/" class="pt-5 d-flex ml-auto justify-content-center"
+          ><img src="../assets/images/fork.png" alt="items" />
+          <h3 class="d-block d-md-none text-decoration-none text-dark ml-4">
+            Menu
+          </h3>
+        </router-link>
       </div>
       <div>
-        <router-link to="/history" class="mt-5 d-block ml-auto"
-          ><img src="../assets/images/clipboard.png" alt="items"
-        /></router-link>
+        <router-link
+          to="/history"
+          class="mt-5 d-flex ml-auto justify-content-center"
+          ><img src="../assets/images/clipboard.png" alt="items" />
+          <h3 class="d-block text-decoration-none text-dark d-md-none ml-3">
+            History
+          </h3>
+        </router-link>
+      </div>
+      <div @click="modal" class="mt-5 d-flex justify-content-center">
+        <img src="../assets/images/add.png" alt="items" />
+        <h3 class="d-block d-md-none ml-2">Add Item</h3>
       </div>
       <div>
         <button
-          v-b-modal.modal-center
-          to=""
-          class="btn btn-outline-light mt-5 d-block ml-auto"
+          class="btn d-flex justify-content-center ml-0 ml-md-3"
+          id="signout"
+          @click="onLogout()"
         >
-          <img src="../assets/images/add.png" alt="items" />
-        </button>
-      </div>
-      <div>
-        <button class="btn" id="signout" @click="onLogout()">
           <i class="fas fa-sign-out-alt" style="font-size: 50px"></i>
+          <h3 class="d-block d-md-none ml-2">Logout</h3>
         </button>
       </div>
     </div>
-    <b-modal hide-footer centered id="modal-center" title="Add Item">
+    <b-modal
+      ref="add-modal"
+      hide-footer
+      centered
+      id="modal-center"
+      title="Add Item"
+    >
       <form @submit.prevent="onSubmit" action="">
         <div class="form-group d-flex">
           <label
@@ -115,7 +129,9 @@
           </div>
         </div>
         <div class="w-100 mt-5 d-flex justify-content-end">
-          <button class="btn px-4 cancelBtn">Cancel</button>
+          <button @click="cancelModal" class="btn px-4 cancelBtn">
+            Cancel
+          </button>
           <button type="submit" class="btn px-4 ml-3 confirmBtn">Add</button>
         </div>
       </form>
@@ -175,8 +191,21 @@ export default {
         } else {
           this.swalPop('Insert Product Success', '', 'success')
           this.actionGetProduct()
+          this.$refs['add-modal'].hide()
         }
       })
+    },
+    modal() {
+      this.$refs['add-modal'].show()
+    },
+    cancelModal() {
+      this.form = {
+        name: '',
+        price: '',
+        image: '',
+        category: '',
+      }
+      this.$refs['add-modal'].hide()
     },
     onLogout() {
       this.actionLogout().then((response) => {
