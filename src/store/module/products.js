@@ -7,6 +7,7 @@ const product = {
     return {
       dataProduct: {},
       detailProduct: [],
+      pagination: {}
     };
   },
   mutations: {
@@ -45,9 +46,10 @@ const product = {
     },
     actionsGetDetail(context, id) {
       return new Promise((resolve, reject) => {
-        axios.get(`http://localhost:3000/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          context.commit('mutationDetailProduct', response.data.data);
-          resolve(response.data.message);
+        axios.get(`${process.env.VUE_APP_SERVER}/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+          console.log(response.data)
+          // context.commit('mutationDetailProduct', response.data.data);
+          // resolve(response.data.message);
         }).catch((err) => {
           reject(err);
         });

@@ -55,7 +55,7 @@ computed: {
         this.$emit('addCart', el)
     },
     toDetail(val) {
-      console.log(val)
+      this.linkTo(`detail/${val.id}`)
     }
   },
   mounted() {

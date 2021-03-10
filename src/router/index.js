@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 // import Store from '../store/index'
 import Register from '../views/Register.vue'
+import Detail from '../views/Detail.vue'
 
 Vue.use(VueRouter)
 
@@ -26,12 +27,12 @@ const routes = [
     component: Register,
     meta: { auth: false },
   },
-  // {
-  //   path: '/detail/:id',
-  //   name: 'Detail',
-  //   component: Detail,
-  //   meta: { auth: true },
-  // },
+  {
+    path: '/detail/:id',
+    name: 'Detail',
+    component: Detail,
+    meta: { auth: true },
+  },
 ]
 
 const router = new VueRouter({
