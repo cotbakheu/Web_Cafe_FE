@@ -121,7 +121,7 @@
               <option
                 v-for="category in listCategory"
                 :key="category.id"
-                :value="category.id"
+                :value="category.category_id"
               >
                 {{ category.category_name }}
               </option>
@@ -156,6 +156,12 @@ export default {
         image: '',
         category: '',
       },
+      getData: {
+        params: '',
+        sort:'',
+        search:'',
+        page: 1
+      },
     };
   },
   components: {
@@ -187,11 +193,18 @@ export default {
       fd.append('category', this.form.category);
       this.insertProduct(fd).then((response)=>{
         if (response.code === 500) {
-          this.swalPop('Insert Product Failed', 'Wrong Image File', 'error')
+          this.swalPop('Insert Product Failed', response.err.message, 'error')
         } else {
-          this.swalPop('Insert Product Success', '', 'success')
-          this.actionGetProduct()
-          this.$refs['add-modal'].hide()
+          this.actionGetProduct(this.getData).then(()=>{
+            this.swalPop('Insert Product Success', '', 'success')
+            this.form = {
+                name: '',
+                price: '',
+                image: '',
+                category: '',
+              }
+            this.$refs['add-modal'].hide()
+          })
         }
       })
     },
@@ -208,8 +221,8 @@ export default {
       this.$refs['add-modal'].hide()
     },
     onLogout() {
-      this.actionLogout().then((response) => {
-        console.log(response);
+      this.actionLogout().then(() => {
+        // console.log(response);
         this.$router.push('/login');
       }).catch((err) => {
         console.log(err);

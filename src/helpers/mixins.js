@@ -17,7 +17,8 @@ export const cafeMixins = {
     alert(title + text + icon)
     },
     curency: (number) => {
-      return number.toLocaleString('id', { style: 'currency', currency: 'IDR' }).replace(',00', '').replace('Rp', 'Rp.')
+      const money = number.toLocaleString('id', { style: 'currency', currency: 'IDR' }).replace(',00', '').replace('Rp', 'Rp.')
+      return money
     },
     swalPop(title, text, icon) {
         Swal.fire({

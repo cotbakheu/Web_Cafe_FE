@@ -6,7 +6,7 @@ const product = {
   state() {
     return {
       dataProduct: {},
-      detailProduct: [],
+      detailProduct: {},
       pagination: {}
     };
   },
@@ -25,7 +25,7 @@ const product = {
     insertProduct(context, data) {
       return new Promise((resolve, reject) => {
         axios.post(`${process.env.VUE_APP_SERVER}/items`, data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          console.log(response.data)  
+          // console.log(response.data)  
           resolve(response.data);
         }).catch((err) => {
           reject(err);
@@ -47,9 +47,9 @@ const product = {
     actionsGetDetail(context, id) {
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.VUE_APP_SERVER}/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          console.log(response.data)
-          // context.commit('mutationDetailProduct', response.data.data);
-          // resolve(response.data.message);
+          // console.log(response.data)
+          context.commit('mutationDetailProduct', response.data.data[0]);
+          resolve(response.data.message);
         }).catch((err) => {
           reject(err);
         });
@@ -57,21 +57,20 @@ const product = {
     },
     actionsDeleteProduct(context, id) {
       return new Promise((resolve, reject) => {
-        axios.delete(`http://localhost:3000/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          console.log(response.data);
-          this.$router.push('/');
-          resolve(response.data.message);
+        axios.delete(`${process.env.VUE_APP_SERVER}/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+          // console.log(response.data);
+          resolve(response.data);
         }).catch((err) => {
           reject(err);
         });
       });
     },
-    actionsUpdateProduct(context, data, id) {
+    actionsUpdateProduct(context, data) {
+      console.log(data.fd)
       return new Promise((resolve, reject) => {
-        axios.put(`http://localhost:3000/items/${id}`, data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          console.log(response.data);
-          this.$router.push('/');
-          resolve(response.data.message);
+        axios.patch(`${process.env.VUE_APP_SERVER}/items/${data.id}`, data.fd, { headers: { token: localStorage.getItem('token') } }).then((response) => {
+          // console.log(response);
+          resolve(response.data);
         }).catch((err) => {
           reject(err);
         });

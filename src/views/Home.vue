@@ -1,7 +1,11 @@
 <template>
   <div>
     <div>
-      <Navbar title="Food Items" @searching="valueSearch" />
+      <Navbar
+        title="Food Items"
+        @searching="valueSearch"
+        :configNav="configNav"
+      />
     </div>
     <div class="row">
       <div
@@ -80,30 +84,34 @@
             :key="index"
             class="pt-3 px-5 d-flex justify-content-between border-bottom pb-2"
           >
-            <div>
+            <div class="mr-1">
               <img
                 :src="`${WebURL}/image/${item.image}`"
                 width="100px"
-                height="100px"
+                height="80px"
                 alt="image"
                 id="img-cursor"
               />
             </div>
             <div>
-              <h3>{{ item.name }}</h3>
+              <h4>{{ item.name }}</h4>
               <div class="d-flex">
-                <div @click="addQty(item)" class="p-3 qtyBtn">+</div>
-                <div class="p-3 qty">{{ item.total_product }}</div>
-                <div @click="minQty(item)" class="p-3 qtyBtn">-</div>
+                <div @click="addQty(item)" class="py-1 px-2 qtyBtn">
+                  <h5>+</h5>
+                </div>
+                <div class="py-1 px-2 qty">{{ item.total_product }}</div>
+                <div @click="minQty(item)" class="py-1 px-2 qtyBtn">
+                  <h5>-</h5>
+                </div>
               </div>
             </div>
-            <div>
+            <div class="mx-1 text-right">
               <div @click="delCart(item)">
                 <h5 class="text-danger text-right">
                   <i class="far text-danger fa-times-circle mb-4"></i>
                 </h5>
               </div>
-              <h3 class="mt-2">{{ curency(item.totalPrice) }}</h3>
+              <h5 class="mt-2">{{ curency(item.totalPrice) }}</h5>
             </div>
           </div>
         </div>
@@ -128,7 +136,7 @@
                   <h5>Cashier: {{ cashier }}</h5>
                 </div>
                 <div class="text-right">
-                  <h5>Receipt no.: {{ useInvoice }}</h5>
+                  <h5>Receipt no. : {{ useInvoice }}</h5>
                 </div>
               </div>
               <div>
@@ -193,7 +201,7 @@ export default {
       cartList: [],
       history: [],
       useInvoice: '',
-      cashier: 'kasir',
+      cashier: localStorage.getItem('username'),
       total: 0,
       ppn:0,
       getData: {
@@ -202,6 +210,7 @@ export default {
         search:'',
         page: 1
       },
+      configNav: true,
     }
   }, 
   components: {
@@ -218,7 +227,8 @@ export default {
   methods: {
     ...mapActions({
       actionGetProduct: 'product/actionsGetProduct',
-      actionInsertHistory: 'history/insertHistory'
+      actionInsertHistory: 'history/insertHistory',
+      actionGetDetail: 'product/actionsGetDetail',
     }),
     toCart (value) {
       const checkProduct = this.cartList.filter(item => {
@@ -273,12 +283,12 @@ export default {
     },
     checkout () {
       const d = new Date()
-      const invoice = `#${d.getYear()}${d.getMonth()+1}${d.getDate()}${d.getHours()+d.getMinutes()+d.getSeconds()}${localStorage.getItem('id')}`
+      const invoice = `${d.getYear()}${d.getMonth()+1}${d.getDate()}${d.getHours()+d.getMinutes()+d.getSeconds()}${localStorage.getItem('id')}`
       this.useInvoice = invoice
       const data = this.cartList.map(el => {
         const rawData = {
           invoice: invoice,
-          cashier: 'kasir',
+          cashier: this.cashier,
           id_product: el.id,
           total_product: el.total_product,
           price: el.totalPrice
@@ -318,6 +328,7 @@ export default {
   },
   mounted() {
     this.actionGetProduct(this.getData)
+    this.actionGetDetail()
   }
 };
 </script>

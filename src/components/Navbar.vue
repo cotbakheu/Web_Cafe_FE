@@ -42,11 +42,15 @@
           </div>
         </div>
       </div>
-      <div class="col-5">
+      <div v-if="configNav === false" class="col-11">
         <h3 class="d-none d-md-block">{{ title }}</h3>
         <h5 class="d-block d-md-none">{{ title }}</h5>
       </div>
-      <div class="d-none d-md-block col-2">
+      <div v-else class="col-5">
+        <h3 class="d-none d-md-block">{{ title }}</h3>
+        <h5 class="d-block d-md-none">{{ title }}</h5>
+      </div>
+      <div v-if="configNav === true" class="d-none d-md-block col-2">
         <form action="">
           <div class="input-group">
             <input
@@ -67,6 +71,7 @@
         </form>
       </div>
       <div
+        v-if="configNav === true"
         class="col-4 ml-4 border-left d-flex justify-content-center align-items-center"
       >
         <h5>Cart</h5>
@@ -84,7 +89,7 @@ import Sidebar from '../components/Sidebar'
 export default {
   name: 'Navbar',
   mixins:[cafeMixins],
-  props: ['title'],
+  props: ['title', 'configNav'],
   components: {
     Sidebar
   },
@@ -106,7 +111,7 @@ export default {
     }),
     toggle () {
       this.onToggle()
-      console.log(this.toggleSidebar)
+      // console.log(this.toggleSidebar)
     },
     onDrop() {
       this.dropSmall = !this.dropSmall

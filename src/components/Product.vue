@@ -49,17 +49,23 @@ computed: {
   },
   methods: {
     ...mapActions({
-      actionGetProduct: 'product/actionsGetProduct'
+      actionGetProduct: 'product/actionsGetProduct',
+      actionGetDetail: 'product/actionsGetDetail',
     }),
     toCart(el) {
         this.$emit('addCart', el)
     },
     toDetail(val) {
-      this.linkTo(`detail/${val.id}`)
+      this.actionGetDetail(val.id).then(()=>{
+        this.linkTo(`detail/${val.id}`)
+      }).catch((err)=>{
+        console.log(err)
+      })
     }
   },
   mounted() {
     this.actionGetProduct(this.getData)
+    this.actionGetDetail()
   }
 }
 </script>

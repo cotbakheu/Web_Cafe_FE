@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 // import Store from '../store/index'
 import Register from '../views/Register.vue'
 import Detail from '../views/Detail.vue'
+import History from '../views/History.vue'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,12 @@ const routes = [
     path: '/detail/:id',
     name: 'Detail',
     component: Detail,
+    meta: { auth: true },
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: History,
     meta: { auth: true },
   },
 ]

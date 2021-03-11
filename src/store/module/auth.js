@@ -14,7 +14,7 @@ const auth = {
     login(context, data) {
       return new Promise((resolve, reject) => {
         axios.post(`${process.env.VUE_APP_SERVER}/login`, data).then((response) => {
-          console.log(response);
+          // console.log(response);
           if (response.data.code === 500) {
             resolve(response.data)
           }
@@ -22,6 +22,7 @@ const auth = {
           localStorage.setItem('email', response.data.data.email);
           localStorage.setItem('id', response.data.data.id);
           localStorage.setItem('access', response.data.data.access);
+          localStorage.setItem('username', response.data.data.username);
           context.commit('setToken', response.data.token);
           resolve(response.data);
         }).catch((err) => {
@@ -41,6 +42,10 @@ const auth = {
     logout() {
       return new Promise((resolve) => {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        localStorage.removeItem('email');
+        localStorage.removeItem('access');
+        localStorage.removeItem('username');
         resolve(true);
       });
     },
