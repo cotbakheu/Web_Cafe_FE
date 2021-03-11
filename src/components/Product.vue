@@ -56,8 +56,12 @@ computed: {
         this.$emit('addCart', el)
     },
     toDetail(val) {
-      this.actionGetDetail(val.id).then(()=>{
-        this.linkTo(`detail/${val.id}`)
+      this.actionGetDetail(val.id).then((response)=>{
+        if(response.code === 500) {
+          this.swalPop('Fail',response.message , 'error' )
+        } else {
+          this.linkTo(`detail/${val.id}`)
+        }
       }).catch((err)=>{
         console.log(err)
       })

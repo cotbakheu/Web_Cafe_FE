@@ -47,9 +47,9 @@ const product = {
     actionsGetDetail(context, id) {
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.VUE_APP_SERVER}/items/${id}`, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          // console.log(response.data)
+          // console.log(response.data.data[0])
           context.commit('mutationDetailProduct', response.data.data[0]);
-          resolve(response.data.message);
+          resolve(response.data);
         }).catch((err) => {
           reject(err);
         });

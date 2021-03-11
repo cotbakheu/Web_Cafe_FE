@@ -5,6 +5,7 @@
         title="Food Items"
         @searching="valueSearch"
         :configNav="configNav"
+        :cartLength="cartLength"
       />
     </div>
     <div class="row">
@@ -211,6 +212,7 @@ export default {
         page: 1
       },
       configNav: true,
+      cartLength: 0,
     }
   }, 
   components: {
@@ -248,6 +250,7 @@ export default {
           totalPrice: value.price 
         }
         this.cartList = [...this.cartList, newData]
+        this.cartLength = this.cartList.length
       }
     },
     addQty (value) {
@@ -273,13 +276,21 @@ export default {
       })
     },
     delCart(value) {
-      const newData =this.cartList.filter(el=>{
+      this.swalConfirm('Do you want to remove this items?', '', 'question').then((response)=>{
+        if (response) {
+          const newData =this.cartList.filter(el=>{
               return value.id != el.id
             })
-      this.cartList = newData
+          this.cartList = newData
+        }
+      })
     },
     cancelCart() {
-      this.cartList = []
+      this.swalConfirm('Do you want to empty cart?', '', 'question').then((response)=>{
+        if(response) {
+          this.cartList = []
+        }
+      })
     },
     checkout () {
       const d = new Date()
@@ -307,9 +318,18 @@ export default {
       this.$refs['checkout'].show()
     },
     sendData () {
+      this.swalLoading('Sending data')
       this.actionInsertHistory(this.history).then((response)=> {
-        console.log(response)
-        this.$refs['checkout'].hide()
+        if (response.data.code === 200) {
+          this.$refs['checkout'].hide()
+          this.cartList=[]
+          this.swalLoadingClose()
+          this.swalPop('Order Recieve!', 'Please wait in your table', 'info')
+        } else {
+          this.$refs['checkout'].hide()
+          this.swalLoadingClose()
+          this.swalPop('Something wrong with server', '', 'error')
+        }
       }).catch((err)=> {
         console.log(err)
       })

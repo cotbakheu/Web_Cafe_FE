@@ -209,7 +209,11 @@ export default {
       })
     },
     modal() {
-      this.$refs['add-modal'].show()
+      if (localStorage.getItem('access') == 1) {
+        this.swalPop('Fail', 'Admin Authorization', 'error')
+      } else {
+        this.$refs['add-modal'].show()
+      }
     },
     cancelModal() {
       this.form = {
@@ -221,12 +225,15 @@ export default {
       this.$refs['add-modal'].hide()
     },
     onLogout() {
-      this.actionLogout().then(() => {
-        // console.log(response);
-        this.$router.push('/login');
-      }).catch((err) => {
-        console.log(err);
-      });
+      this.swalConfirm('Do you want to logout!', '', 'warning').then((response)=>{
+        if (response) {
+          this.actionLogout().then(() => {
+            this.$router.push('/login');
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      })
     },
   },
 };

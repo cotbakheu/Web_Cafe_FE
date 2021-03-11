@@ -75,7 +75,9 @@
         class="col-4 ml-4 border-left d-flex justify-content-center align-items-center"
       >
         <h5>Cart</h5>
-        <div class="rounded-pill ml-2"><h5>0</h5></div>
+        <div class="cartLength badge rounded-pill ml-2">
+          <h5>{{ cartLength }}</h5>
+        </div>
       </div>
     </div>
   </div>
@@ -89,7 +91,7 @@ import Sidebar from '../components/Sidebar'
 export default {
   name: 'Navbar',
   mixins:[cafeMixins],
-  props: ['title', 'configNav'],
+  props: ['title', 'configNav', 'cartLength'],
   components: {
     Sidebar
   },
@@ -139,5 +141,8 @@ export default {
   transition: 1s ease-out;
   height: auto;
   z-index: 5;
+}
+.cartLength {
+  background-color: #23b6e2;
 }
 </style>

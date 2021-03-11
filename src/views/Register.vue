@@ -18,6 +18,7 @@
             class="form-control shadow ml-5 w-50"
             id="email"
             placeholder="Email"
+            required
           />
         </div>
         <div class="form-group d-flex align-items-center">
@@ -28,6 +29,7 @@
             class="form-control shadow ml-5 w-50"
             id="password"
             placeholder="Password"
+            required
           />
         </div>
         <div class="form-group d-flex align-items-center">
@@ -38,6 +40,7 @@
             class="form-control shadow ml-5 w-50"
             id="username"
             placeholder="Username"
+            required
           />
         </div>
         <div class="form-group d-flex align-items-center">
@@ -48,7 +51,11 @@
             id="username"
             placeholder="Username"
           /> -->
-          <select v-model="form.access" class="form-control shadow ml-5 w-50">
+          <select
+            v-model="form.access"
+            class="form-control shadow ml-5 w-50"
+            required
+          >
             <option value="0">Admin</option>
             <option value="1">Kasir</option>
           </select>
@@ -88,6 +95,7 @@ export default {
       register: 'auth/register',
     }),
     onSubmit() {
+      this.swalLoading('Processing Register')
       const access = Number(this.form.access);
       const data = {
         username: this.form.username,
@@ -98,9 +106,11 @@ export default {
       this.register(data).then((response) => {
         if (response.code === 500) {
           this.swalPop('Register Failed', response.message, 'error')
+          this.swalClose()
         }else {
           this.swalPop('Register Success', '', 'success')
           this.linkTo('login')
+          this.swalClose()
         }
       }).catch((err) => {
         console.log(err);

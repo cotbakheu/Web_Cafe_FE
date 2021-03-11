@@ -109,33 +109,41 @@
               </tbody>
             </table>
           </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <b-pagination
+              @input="nextPage"
+              v-model="getData.page"
+              :total-rows="getPagination.totalData"
+              :per-page="getPagination.limit"
+              size="sm"
+              align="center"
+              class="mt-2 mr-4"
+            ></b-pagination>
+          </div>
         </div>
       </div>
       <b-modal
+        hide-footer
         ref="detailHistory"
         id="modal-lg"
         size="lg"
         title="Detail History"
-        ><table class="table">
-          <thead>
-            <tr>
-              <th scope="col">CASHIER</th>
-              <th scope="col">DATE</th>
-              <th scope="col">PRODUCT</th>
-              <th scope="col">QUANTITY</th>
-              <th scope="col">AMOUNT</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="history in getHistory" :key="history.id">
-              <td>{{ history.cashier }}</td>
-              <td>{{ history.date }}</td>
-              <td>{{ history.name }}</td>
-              <td>{{ history.quantity }}</td>
-              <td>{{ curency(Number(history.amount)) }}</td>
-            </tr>
-          </tbody>
-        </table></b-modal
+        ><div>
+          <div class="d-flex justify-content-between border-bottom">
+            <h4>Product</h4>
+            <h4>Quantity</h4>
+            <h4>Amount</h4>
+          </div>
+          <div
+            v-for="detHistory in detail"
+            :key="detHistory.id"
+            class="d-flex justify-content-between mt-3"
+          >
+            <h4>{{ detHistory.name }}</h4>
+            <h4>{{ detHistory.total_product }}</h4>
+            <h4>{{ detHistory.price }}</h4>
+          </div>
+        </div></b-modal
       >
     </div>
   </div>
@@ -162,13 +170,16 @@ export default {
               sort:'',
               search:'',
               page: 1
-            }
+            },
+            detail: []
         }
     },
 
     computed: {
         ...mapGetters({
-          getHistory: 'history/getHistory'
+          getHistory: 'history/getHistory',
+          detailHistory: 'history/detailHistory',
+          getPagination: 'history/getPagination'
         })
     },
     methods: {
@@ -189,11 +200,17 @@ export default {
         this.actionGetHistory(this.getData)
       },
       toDetail (val) {
-        this.actionDetailHistory(val).then(()=>{
+        this.actionDetailHistory(val).then((response)=>{
+          this.detail = response
+          // console.log(this.detail)
+          // this.swalLoadingClose()
           this.$refs['detailHistory'].show()
         }).catch((err)=>{
           console.log(err)
         })
+      },
+      nextPage() {
+        this.actionGetProduct(this.getData)
       }
     },
     mounted() {

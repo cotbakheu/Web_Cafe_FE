@@ -46,6 +46,19 @@ export const cafeMixins = {
         });
       });
     },
+    swalLoading (title) {
+      Swal.fire({
+        title: title,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading()
+        }
+      })
+    },
+    swalLoadingClose () {
+      Swal.close()
+    },
     linkTo (route) {
         this.$router.push(`/${route}`)
     },

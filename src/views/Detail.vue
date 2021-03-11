@@ -10,7 +10,7 @@
       >
         <Sidebar />
       </div>
-      <div class="col-9 d-flex justify-content-center">
+      <div class="col-11 d-flex justify-content-center">
         <div class="">
           <div class="card mt-2" style="width: 14rem">
             <img
@@ -174,7 +174,13 @@ export default {
               image: '',
               category: ''
             },
-            configNav: false
+            configNav: false,
+            getData: {
+              params: '',
+              sort:'',
+              search:'',
+              page: 1
+            },
         }
     },
     computed: {
@@ -192,12 +198,16 @@ export default {
             actionGetProduct: 'product/actionsGetProduct',
         }),
       delProduct() {
-        this.deleteProduct(this.id).then((response)=>{
-          this.swalPop(response.message, '', 'success')
-          this.actionGetProduct()
-          this.linkTo('')
-        }).catch((err)=>{
-          console.log(err)
+        this.swalConfirm('Do you want to delete this product?', '', 'warning').then((response)=>{
+          if (response) {
+            this.deleteProduct(this.id).then((response)=>{
+            this.swalPop(response.message, '', 'success')
+            this.actionGetProduct(this.getData)
+            this.linkTo('')
+          }).catch((err)=>{
+            console.log(err)
+          })
+          }
         })  
       },
       uploadFile(e) {

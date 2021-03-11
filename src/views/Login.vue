@@ -79,7 +79,6 @@ export default {
         if (response.code === 500) {
           this.swalPop('Login Failed', response.message, 'error');
         } else {
-          this.swalPop('Login Success', '', 'success');
           this.linkTo('')
         }
       }).catch((err) => {
