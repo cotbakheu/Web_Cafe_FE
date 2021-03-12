@@ -15,7 +15,10 @@
       >
         <Sidebar />
       </div>
-      <div class="col-10 col-md-9 col-lg-6 mt-4 ml-4 mr-lg-4">
+      <div
+        class="col-10 col-md-9 col-lg-6 mt-4 ml-4 mr-lg-4"
+        style="height: 100vh"
+      >
         <div class="d-flex justify-content-end align-items-center">
           <b-dropdown
             id="dropdown-left"
@@ -46,9 +49,7 @@
           </b-dropdown>
         </div>
         <Product @addCart="toCart" />
-        <div
-          class="d-flex justify-content-center align-items-center float-bottom"
-        >
+        <div class="d-flex justify-content-center justify-self-center">
           <b-pagination
             @input="nextPage"
             v-model="getData.page"

@@ -33,7 +33,10 @@
                   <h5 class="text-right">{{ getDetail.category_name }}</h5>
                 </div>
                 <div class="mt-4">
-                  <button @click="delProduct" class="btn w-100 btn-danger p-2">
+                  <button
+                    @click="delProduct()"
+                    class="btn w-100 btn-danger p-2"
+                  >
                     Delete
                   </button>
                   <button @click="upProduct" class="btn w-100 mt-2 confirmBtn">
@@ -143,7 +146,9 @@
             <button @click="cancelModal" class="btn px-4 cancelBtn">
               Cancel
             </button>
-            <button type="submit" class="btn px-4 ml-3 confirmBtn">Add</button>
+            <button type="submit" class="btn px-4 ml-3 confirmBtn">
+              Update
+            </button>
           </div>
         </form>
       </b-modal>
@@ -201,9 +206,10 @@ export default {
         this.swalConfirm('Do you want to delete this product?', '', 'warning').then((response)=>{
           if (response) {
             this.deleteProduct(this.id).then((response)=>{
-            this.swalPop(response.message, '', 'success')
-            this.actionGetProduct(this.getData)
-            this.linkTo('')
+              this.actionGetProduct(this.getData).then(()=>{
+                this.swalPop(response.message, '', 'success')
+                this.linkTo('')
+              })
           }).catch((err)=>{
             console.log(err)
           })

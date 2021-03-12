@@ -1,5 +1,5 @@
 <template>
-  <div class="row row-cols-md-3 row-cols-2">
+  <div class="row row-cols-md-3 row-cols-2 h-auto">
     <div v-for="(product, index) in getProduct" :key="index">
       <div class="card mt-2" style="max-width: 12rem">
         <img
