@@ -1,5 +1,5 @@
 # Web_Cafe
-Web Cafe is an aplication of point of sales web that can organize product sales. It has two roles, Admin and Cashier. Both of these roles han their own authorization. In this Web we can CRUD product and create history of sold product.
+Web Cafe is point of sales web aplication that can organize product sales. It has two roles, Admin and Cashier. Both of these roles has their own authorization. In this aplication we can CRUD product and create history of sold product.
 This app use Vue Js as frontend development, Express Js as backend development and MySQl as database. 
 
 
