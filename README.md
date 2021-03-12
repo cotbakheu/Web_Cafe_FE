@@ -64,7 +64,7 @@ npm run lint
 ```
 
 ## Deployment
- * Visit our demo at : soon 
+ * Visit our demo at : [Demo Web Cafe](http://bit.ly/Web_Cafe) 
 
 ## Backend Repository
 [Backend Web Cafe Aplication](https://github.com/cotbakheu/WEB_Cafe_BE)
