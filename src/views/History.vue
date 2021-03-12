@@ -102,7 +102,11 @@
                   <td>{{ history.date }}</td>
                   <td>{{ history.quantity }}</td>
                   <td>{{ curency(Number(history.amount)) }}</td>
-                  <td @click="toDetail(history.invoice)" class="text-primary">
+                  <td
+                    v-cursor="{ cursor: 'pointer' }"
+                    @click="toDetail(history.invoice)"
+                    class="text-primary"
+                  >
                     Detail <i class="fas fa-info-circle"></i>
                   </td>
                 </tr>
@@ -215,7 +219,7 @@ export default {
     },
     mounted() {
         this.actionGetHistory(this.getData)
-    }
+    },
 
 }
 </script>

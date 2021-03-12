@@ -15,7 +15,7 @@
       >
         <Sidebar />
       </div>
-      <div class="col-6 mt-4 ml-4 mr-lg-4">
+      <div class="col-10 col-md-9 col-lg-6 mt-4 ml-4 mr-lg-4">
         <div class="d-flex justify-content-end align-items-center">
           <b-dropdown
             id="dropdown-left"
@@ -46,7 +46,9 @@
           </b-dropdown>
         </div>
         <Product @addCart="toCart" />
-        <div class="d-flex justify-content-center align-items-center">
+        <div
+          class="d-flex justify-content-center align-items-center float-bottom"
+        >
           <b-pagination
             @input="nextPage"
             v-model="getData.page"
@@ -60,13 +62,13 @@
       </div>
       <div
         v-if="cartList.length <= 0"
-        class="shadow d-none d-lg-block col-4 ml-5"
+        class="shadow d-none d-md-block col-md-1 col-lg-4 ml-5"
       >
         <div>
           <aside class="right" id="side-right">
             <div class="">
               <img
-                class="image"
+                class="image-fluid"
                 src="../assets/images/food-and-restaurant.png"
                 alt="image-empty"
               />
@@ -95,19 +97,27 @@
               />
             </div>
             <div>
-              <h4>{{ item.name }}</h4>
+              <h6>{{ item.name }}</h6>
               <div class="d-flex">
-                <div @click="addQty(item)" class="py-1 px-2 qtyBtn">
-                  <h5>+</h5>
-                </div>
-                <div class="py-1 px-2 qty">{{ item.total_product }}</div>
-                <div @click="minQty(item)" class="py-1 px-2 qtyBtn">
+                <div
+                  v-cursor="{ cursor: 'pointer' }"
+                  @click="minQty(item)"
+                  class="py-0 px-1 qtyBtn"
+                >
                   <h5>-</h5>
+                </div>
+                <div class="py-0 px-1 qty">{{ item.total_product }}</div>
+                <div
+                  v-cursor="{ cursor: 'pointer' }"
+                  @click="addQty(item)"
+                  class="py-0 px-1 qtyBtn"
+                >
+                  <h5>+</h5>
                 </div>
               </div>
             </div>
             <div class="mx-1 text-right">
-              <div @click="delCart(item)">
+              <div v-cursor="{ cursor: 'pointer' }" @click="delCart(item)">
                 <h5 class="text-danger text-right">
                   <i class="far text-danger fa-times-circle mb-4"></i>
                 </h5>
@@ -117,6 +127,15 @@
           </div>
         </div>
         <div class="px-3">
+          <div class="d-flex w-100 justify-content-between">
+            <div class="text-left">
+              <h4>Total:</h4>
+              <p>*Doesn't include ppn</p>
+            </div>
+            <div>
+              <h4>{{ curency(totalMoney) }}</h4>
+            </div>
+          </div>
           <button @click="checkout" class="btn w-100 cancelBtn">
             <h3>Checkout</h3>
           </button>
@@ -213,6 +232,7 @@ export default {
       },
       configNav: true,
       cartLength: 0,
+      totalMoney: 0,
     }
   }, 
   components: {
@@ -243,6 +263,7 @@ export default {
             el.totalPrice += value.price 
           }
         })
+        this.totalBeforeCheckout()
       } else {
         const newData = { 
           ...value, 
@@ -251,29 +272,35 @@ export default {
         }
         this.cartList = [...this.cartList, newData]
         this.cartLength = this.cartList.length
+        this.totalBeforeCheckout()
       }
     },
     addQty (value) {
       this.cartList.forEach(el => {
         if (el.id === value.id) {
-          el.total_product +=1
+          el.total_product += 1
           el.totalPrice += value.price
+          this.cartLength += 1
         }
       })
+      this.totalBeforeCheckout()
     },
     minQty (value) {
       this.cartList.forEach(el => {
         if (el.id === value.id) {
-          el.total_product -=1
+          el.total_product -= 1
           el.totalPrice -= value.price
+          this.cartLength -= 1
           if (el.total_product <= 0){
             const newData =this.cartList.filter(el=>{
               return value.id != el.id
             })
             this.cartList = newData
+            this.cartLength = this.cartList.length
           }
         }
       })
+      this.totalBeforeCheckout()
     },
     delCart(value) {
       this.swalConfirm('Do you want to remove this items?', '', 'question').then((response)=>{
@@ -282,6 +309,8 @@ export default {
               return value.id != el.id
             })
           this.cartList = newData
+          this.cartLength = this.cartList.length
+          this.totalBeforeCheckout()
         }
       })
     },
@@ -289,33 +318,48 @@ export default {
       this.swalConfirm('Do you want to empty cart?', '', 'question').then((response)=>{
         if(response) {
           this.cartList = []
+          this.cartLength = this.cartList.length
+          this.totalBeforeCheckout
         }
       })
     },
-    checkout () {
-      const d = new Date()
-      const invoice = `${d.getYear()}${d.getMonth()+1}${d.getDate()}${d.getHours()+d.getMinutes()+d.getSeconds()}${localStorage.getItem('id')}`
-      this.useInvoice = invoice
-      const data = this.cartList.map(el => {
-        const rawData = {
-          invoice: invoice,
-          cashier: this.cashier,
-          id_product: el.id,
-          total_product: el.total_product,
-          price: el.totalPrice
-        }
-        return rawData
-      })
+    totalBeforeCheckout () {
       const num = this.cartList.map(el=>{
         return el.totalPrice
       })
       const dataTotal = num.reduce((acc,cur)=>{
           return acc + cur
       },0)
-      this.ppn = dataTotal * 0.1
-      this.total = dataTotal + this.ppn
-      this.history = data
-      this.$refs['checkout'].show()
+      this.totalMoney = dataTotal
+    },
+    checkout () {
+      if (localStorage.getItem('access') == 0) {
+        this.swalPop('Cashier Authorization', '', 'warning')
+      } else {
+        const d = new Date()
+        const invoice = `${d.getYear()}${d.getMonth()+1}${d.getDate()}${d.getHours()+d.getMinutes()+d.getSeconds()}${localStorage.getItem('id')}`
+        this.useInvoice = invoice
+        const data = this.cartList.map(el => {
+          const rawData = {
+            invoice: invoice,
+            cashier: this.cashier,
+            id_product: el.id,
+            total_product: el.total_product,
+            price: el.totalPrice
+          }
+          return rawData
+        })
+        const num = this.cartList.map(el=>{
+          return el.totalPrice
+        })
+        const dataTotal = num.reduce((acc,cur)=>{
+            return acc + cur
+        },0)
+        this.ppn = dataTotal * 0.1
+        this.total = dataTotal + this.ppn
+        this.history = data
+        this.$refs['checkout'].show()
+      }
     },
     sendData () {
       this.swalLoading('Sending data')

@@ -1,11 +1,12 @@
 <template>
-  <div class="row row-cols-md-4 row-cols-lg-3 row-cols-2">
+  <div class="row row-cols-md-3 row-cols-2">
     <div v-for="(product, index) in getProduct" :key="index">
-      <div class="card mt-2" style="width: 14rem">
+      <div class="card mt-2" style="max-width: 12rem">
         <img
+          v-cursor="{ cursor: 'pointer' }"
           @click="toCart(product)"
           :src="`${WebURL}/image/${product.image}`"
-          class="card-img-top"
+          class="card-img-top image-fluid"
           alt="product"
         />
         <div class="card-body d-flex">
@@ -13,7 +14,7 @@
             <h5 class="card-title">{{ product.name }}</h5>
             <span class="card-text mb-2">{{ curency(product.price) }} </span>
           </div>
-          <div @click="toDetail(product)" class="text-center ml-5">
+          <div @click="toDetail(product)" class="text-center ml-3">
             <h4 class="text-primary">
               <i class="fas fa-info-circle"></i>
             </h4>

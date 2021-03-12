@@ -25,7 +25,7 @@ const product = {
     insertProduct(context, data) {
       return new Promise((resolve, reject) => {
         axios.post(`${process.env.VUE_APP_SERVER}/items`, data, { headers: { token: localStorage.getItem('token') } }).then((response) => {
-          // console.log(response.data)  
+          console.log(response.data)  
           resolve(response.data);
         }).catch((err) => {
           reject(err);

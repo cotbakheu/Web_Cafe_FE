@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Detail from '../views/Detail.vue'
 import History from '../views/History.vue'
+import Swal from 'sweetalert2'
 
 Vue.use(VueRouter)
 
@@ -53,14 +54,21 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token')) {
       next();
     } else {
-      alert('anda belum login');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Can\'t Access',
+        text: 'Login Required!',
+      })
       next({
         path: '/login',
       });
     }
   } else if (to.matched[0].meta.auth === false) {
     if (localStorage.getItem('token')){
-      alert ('anda sudah login')
+      Swal.fire({
+        icon: 'warning',
+        title: 'Already Login',
+      })
       next({
         path:'/'
       })

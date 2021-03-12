@@ -10,17 +10,23 @@
         </router-link>
       </div>
       <div>
-        <router-link
-          to="/history"
+        <div
+          @click="toHistory"
+          v-cursor="{ cursor: 'pointer' }"
           class="mt-5 d-flex ml-auto justify-content-center"
-          ><img src="../assets/images/clipboard.png" alt="items" />
+        >
+          <img src="../assets/images/clipboard.png" alt="items" />
           <h3 class="d-block text-decoration-none text-dark d-md-none ml-3">
             History
           </h3>
-        </router-link>
+        </div>
       </div>
       <div @click="modal" class="mt-5 d-flex justify-content-center">
-        <img src="../assets/images/add.png" alt="items" />
+        <img
+          v-cursor="{ cursor: 'pointer' }"
+          src="../assets/images/add.png"
+          alt="items"
+        />
         <h3 class="d-block d-md-none ml-2">Add Item</h3>
       </div>
       <div>
@@ -185,6 +191,7 @@ export default {
       this.form.image = e.target.files[0];
     },
     onSubmit() {
+      this.swalLoading('Processing input')
       const newPrice = Number(this.form.price)
       const fd = new FormData();
       fd.append('name', this.form.name);
@@ -193,9 +200,11 @@ export default {
       fd.append('category', this.form.category);
       this.insertProduct(fd).then((response)=>{
         if (response.code === 500) {
+          this.swalLoadingClose()
           this.swalPop('Insert Product Failed', response.err.message, 'error')
         } else {
           this.actionGetProduct(this.getData).then(()=>{
+            this.swalLoadingClose()
             this.swalPop('Insert Product Success', '', 'success')
             this.form = {
                 name: '',
@@ -235,6 +244,12 @@ export default {
         }
       })
     },
+    toHistory() {
+      if(localStorage.getItem('access') == 1) {
+        this.swalPop('Admin Authorization', 'You are login as Cashier', 'warning')
+        this.linkTo('/')
+      }
+    }
   },
 };
 </script>

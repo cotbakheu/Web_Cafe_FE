@@ -72,11 +72,26 @@
       </div>
       <div
         v-if="configNav === true"
-        class="col-4 ml-4 border-left d-flex justify-content-center align-items-center"
+        class="col-6 col-md-4 ml-4 border-left d-flex justify-content-center align-items-center"
       >
-        <h5>Cart</h5>
-        <div class="cartLength badge rounded-pill ml-2">
-          <h5>{{ cartLength }}</h5>
+        <div class="d-flex align-items-center d-md-none">
+          <h5>Cart</h5>
+          <div
+            @click="showCart"
+            class="cartLength text-light ml-2"
+            style="border-radius: 50%; height: 25px; width: 25px"
+          >
+            <h5>{{ cartLength }}</h5>
+          </div>
+        </div>
+        <div class="d-none d-md-flex align-items-center">
+          <h5>Cart</h5>
+          <div
+            class="cartLength text-light ml-2"
+            style="border-radius: 50%; height: 25px; width: 25px"
+          >
+            <h5>{{ cartLength }}</h5>
+          </div>
         </div>
       </div>
     </div>
@@ -125,6 +140,9 @@ export default {
       }).catch((err)=>{
         console.log(err)
       })
+    },
+    showCart() {
+      alert('show')
     }
   },
 };

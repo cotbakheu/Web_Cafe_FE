@@ -64,7 +64,15 @@ export const cafeMixins = {
     },
     onToggle () {
       this.toggleSidebar = !this.toggleSidebar
+    },
+    cursor (el, binding) {
+      el.style = `cursor:${binding.value.cursor}`
     }
   },
+  directives: {
+    cursor: function(el, binding) {
+      el.style = `cursor:${binding.value.cursor}`
+    }
+  }
 };
 
